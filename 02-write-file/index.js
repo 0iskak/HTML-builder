@@ -7,15 +7,18 @@ const writer = fs.createWriteStream(path.join(__dirname, 'text.txt'), {
 });
 
 process.stdin.on('data', (chunk) => {
-  if (chunk.toString().trim() === 'exit')
-    process.kill(process.pid, 'SIGINT');
-  else
+  if (chunk.toString().trim() === 'exit') {
+    process.exit();
+  } else
     writer.write(chunk);
 });
 
 process.on('SIGINT', () => {
-  process.stdout.write('Closing the application.');
   process.exit();
+});
+
+process.on('exit', () => {
+  process.stdout.write('Closing the application.');
 });
 
 process.stdout.write('Hi, waiting for input.\n');
